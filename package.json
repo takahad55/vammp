@@ -1,0 +1,16 @@
+{
+  "name": "vammp-vanilla",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "Build a DOM tree from view data defined in JavaScript.",
+  "main": "src/vammp.js",
+  "scripts": {
+    "test": "node --test test/index.mjs"
+  },
+  "keywords": [
+    "view",
+    "dom"
+  ],
+  "author": "Takahashi Daishi",
+  "license": "MIT"
+}
