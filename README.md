@@ -48,7 +48,18 @@ It supports two formats: function format and array format. They can be mixed.
 
 関数フォーマット、配列フォーマットの２つのフォーマットをサポートしています（混在可能）。
 
-Function format:
+### Function format
+
+```js
+tag([child?|props?, ...])
+```
+
+There are functions corresponding to all tags, and in Array format function calls represent element generation.
+Properties are optional, can be multiple, and can be mixed with child elements.
+
+全タグに対応する関数があり、関数フォーマットでは関数呼び出しがelement生成を表します。
+プロパティは省略可能、複数可能で子要素と混在可能です。
+
 ```js
 const view = [
     div(
@@ -62,7 +73,14 @@ const view = [
 ]
 ```
 
-Array format:
+### Array format
+```js
+[tag, [child?|props?, ...]]
+```
+Array format puts the tag function and its arguments into an array instead of the function call.
+
+配列フォーマットでは関数呼び出しの代わりにtag関数とその引数を一つの配列に入れます。
+
 ```js
 const view = [
     [div,
@@ -75,26 +93,6 @@ const view = [
     ]
 ]
 ```
-
-### Function format
-
-```js
-tag([child?|props?, ...])
-```
-
-There are functions corresponding to all tags, and in Array format function calls represent element generation.
-Properties are optional and can be mixed with child elements.
-
-全タグに対応する関数があり、関数フォーマットでは関数呼び出しがelement生成を表します。
-プロパティは省略可能で子要素と混在可能です。
-
-### Array format
-```js
-[tag, [child?|props?, ...]]
-```
-Array format puts the tag function and its arguments into an array instead of the function call.
-
-配列フォーマットでは関数呼び出しの代わりにtag関数とその引数を一つの配列に入れます。
 
 ## class and style (DOM only)
 
@@ -211,7 +209,7 @@ app()
 ## Use with Vue
 
 You can switch the render function using setCreateElement(). For Vue, set the render function h.
-Use createView() to create views.
+Use createView() to create view.
 Components should use element() to generate a tag function that can be used in vammp format.
 
 setCreateElement()を使うとレンダー関数を切り替えられます。Vueの場合レンダー関数hをセットします。
@@ -430,7 +428,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(React.createElement(App, {}, null));
 ```
 
-## all exports
+## All exports
 
 ```js
 const {
@@ -452,6 +450,7 @@ const {
     meter, optgroup, option, output, progress, select, textarea,
     details, dialog, summary,
     slot, template,
+    // API
     mount, createView, element, setCreateElement, collectArgs, 
     setStyle, setClass, getStyleObj, getClassObj,
 } = vammp
