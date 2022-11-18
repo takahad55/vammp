@@ -1,7 +1,7 @@
-import vamp from '../../src/vammp.js'
+import vammp from '../../src/vammp.js'
 const { div, button, mount, br, select, option, collectArgs,
   setStyle, setClass, getStyleObj, getClassObj,
-} = vamp
+} = vammp
 
 /*
 <div>

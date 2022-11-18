@@ -7,8 +7,8 @@ JavaScriptで定義したviewデータからDOMツリーを生成します。Vue
 ## Example
 
 ```js:vammpdemo.js
-import vamp from 'https://unpkg.com/vammp@0.0.1/src/vammp.js'
-const { div, button, mount,} = vamp
+import vammp from 'https://unpkg.com/vammp@0.0.1/src/vammp.js'
+const { div, button, mount,} = vammp
 
 function app() {
   const view = [
@@ -44,7 +44,21 @@ app()
 
 It supports two formats: function format and array format. They can be mixed.
 
-配列フォーマット、関数フォーマットの２つのフォーマットをサポートしています（混在可能）。
+関数フォーマット、配列フォーマットの２つのフォーマットをサポートしています（混在可能）。
+
+Function format:
+```js
+const view = [
+    div(
+        button({style: 'color: grey;', onclick: () => console.log('cancel clicked')},
+            'Cancel'
+        ),
+        button({style: 'background-color: aqua;', onclick: () => console.log('ok clicked')},
+            'OK'
+        ),
+    )
+]
+```
 
 Array format:
 ```js
@@ -60,20 +74,6 @@ const view = [
 ]
 ```
 
-Function format:
-```js
-const view = [
-    div(
-        button({style: 'color: grey;', onclick: () => console.log('app0f: cancel clicked')},
-            'Cancel'
-        ),
-        button({style: 'background-color: aqua;', onclick: () => console.log('app0f: ok clicked')},
-            'OK'
-        ),
-    )
-]
-```
-
 ### Function format
 
 ```js
@@ -83,22 +83,22 @@ tag([child?|props?, ...])
 There are functions corresponding to all tags, and in Array format function calls represent element generation.
 Properties are optional and can be mixed with child elements.
 
-全タグに対応する関数があり、Array formatでは関数呼び出しがelement生成を表します。
+全タグに対応する関数があり、関数フォーマットでは関数呼び出しがelement生成を表します。
 プロパティは省略可能で子要素と混在可能です。
 
 ### Array format
 ```js
 [tag, [child?|props?, ...]]
 ```
-Function format puts the tag function and its arguments into an array instead of the function call.
+Array format puts the tag function and its arguments into an array instead of the function call.
 
-Function formatでは関数呼び出しの代わりにtag関数とその引数を一つの配列に入れます。
+配列フォーマットでは関数呼び出しの代わりにtag関数とその引数を一つの配列に入れます。
 
 ## class and style (DOM only)
 
 Class and style can be specified in two forms: strings and objects. Mixing is not allowed in one element.
 
-classとstyleは文字列とオブジェクトの２つの形式で指定できます。一つのelement指定の中で混在は許されません。
+classとstyleは文字列とオブジェクトの２つの形式で指定できます。一つのelement指定の中で混在はできません。
 
 class:
 ```js
@@ -133,9 +133,9 @@ const view = [
 
 ## Ref (DOM only)
 
-It supports a way to get a DOM Element reference without using getElementById(). Specify an empty object for the Ref property and any name for the Name property. element is set to ref['name'] after mount().
+It supports a way to get a DOM Element reference without using getElementById(). Specify an empty object for the Ref property and any name for the Name property. DOM Element is set to ref['name'] after mount().
 
-getElementById()を使用しなくてもDOM Elementの参照を取得する方法をサポートしています。Refプロパティに空のobjectを、Nameプロパティに任意の名前を指定してください。mount後にref['name']にelementがセットされます。
+getElementById()を使用しなくてもDOM Elementの参照を取得する方法をサポートしています。Refプロパティに空のobjectを、Nameプロパティに任意の名前を指定してください。mount後にref['name']にDOM Elementがセットされます。
 
 ```js
 function app() {
@@ -185,8 +185,8 @@ function app() {
   // view
   const view = [
     [div,
-      [cancelButton, { Ref: ref, Name: 'cancelButton', onclick: () => console.log('app3: cancel clicked') }],
-      [okButton, largeFont, {onclick: () => console.log('app3: ok clicked')}],
+      [cancelButton, { Ref: ref, Name: 'cancelButton', onclick: () => console.log('cancel clicked') }],
+      [okButton, largeFont, {onclick: () => console.log('ok clicked')}],
       [br],
       [select, wheatBack, largeFont,
         [option, 'sel1', { value: 'v1', selected: true }],
@@ -316,7 +316,7 @@ app.mount('#app')
 
 For React, set the render function React.createElement.
 
-Reactの場合レンダー関数createElementをセットします。
+Reactの場合レンダー関数React.createElementをセットします。
 
 [demo](https://takahad55.github.io/vammp/example/reacttest/reactvammptest.html)
 
@@ -457,9 +457,9 @@ const {
 
 ### HTML to VAMMP format converter in Python
 
-Reads HTML from standard input and outputs VAMMP to standard output. `pip3 install beautifulsoup4` command is required.
+Reads HTML from standard input and outputs VAMMP format to standard output. `pip3 install beautifulsoup4` command is required.
 
-標準入力からHTMLを読み込み標準出力へVAMMPを出力します。
+標準入力からHTMLを読み込み標準出力へVAMMPフォーマットを出力します。
 
 ```Python
 import sys
