@@ -1,5 +1,5 @@
 {
-  "name": "vammp-vanilla",
+  "name": "vammp",
   "type": "module",
   "version": "0.0.1",
   "description": "Build a DOM tree from view data defined in JavaScript.",
@@ -9,6 +9,9 @@
   },
   "keywords": [
     "view",
+    "render",
+    "vue",
+    "react",
     "dom"
   ],
   "author": "Takahashi Daishi",

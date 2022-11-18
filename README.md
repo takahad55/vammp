@@ -7,7 +7,7 @@ JavaScriptで定義したviewデータからDOMツリーを生成します。Vue
 ## Example
 
 ```js:vammpdemo.js
-import vamp from 'vammp'
+import vamp from 'https://unpkg.com/vammp@0.0.1/src/vammp.js'
 const { div, button, mount,} = vamp
 
 function app() {
@@ -17,7 +17,7 @@ function app() {
         'Cancel'
       ],
       [button, {style: 'background-color: aqua;', onclick: () => console.log('ok clicked')},
-        'Save'
+        'OK'
       ],
     ]
   ]
@@ -38,6 +38,8 @@ app()
 </html>
 ```
 
+[demo](https://takahad55.github.io/vammp/example/vammptest/vammptest.html)
+
 ## Two formats
 
 It supports two formats: function format and array format. They can be mixed.
@@ -52,7 +54,7 @@ const view = [
             'Cancel'
         ],
         [button, {style: 'background-color: aqua;', onclick: () => console.log('ok clicked')},
-            'Save'
+            'OK'
         ],
     ]
 ]
@@ -136,7 +138,7 @@ It supports a way to get a DOM Element reference without using getElementById().
 getElementById()を使用しなくてもDOM Elementの参照を取得する方法をサポートしています。Refプロパティに空のobjectを、Nameプロパティに任意の名前を指定してください。mount後にref['name']にelementがセットされます。
 
 ```js
-function app3() {
+function app() {
   // aliases
   const greyFont = {style: {color: 'grey'}, class: {greyFont: true, aquaBack: false}}
   const aquaBack = {style: {'background-color': 'aqua'}, class: {aquaBack: true}}
@@ -201,6 +203,7 @@ function app3() {
   ]
   mount("#app", view)
 }
+app()
 ```
 
 ## Use with Vue
@@ -213,7 +216,7 @@ setCreateElement()を使うとレンダー関数を切り替えられます。Vu
 viewの生成にはcreateView()を使用します。
 コンポーネントはelement()を使ってvammpフォーマットで使用できるtag関数を生成する必要があります。
 
-TODO demo link
+[demo](https://takahad55.github.io/vammp/example/vuetest/vuevammptest.html)
 
 ```js
 import { createApp, ref, reactive, h, resolveComponent } from 'vue'
@@ -311,18 +314,21 @@ app.mount('#app')
 
 ## Use with React
 
+For React, set the render function React.createElement.
+
 Reactの場合レンダー関数createElementをセットします。
 
-TODO demo link
+[demo](https://takahad55.github.io/vammp/example/reacttest/reactvammptest.html)
 
 ```js
 const { useState, useEffect, useRef, createElement } = React
 
-import vammp from 'vammp.js'
+import vammp from 'vammp'
 const {
   createView, element, collectArgs,
   button, div, input, label,
 } = vammp
+
 vammp.setCreateElement(createElement)
 
 function TodoList(props) {
