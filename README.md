@@ -40,6 +40,8 @@ app()
 
 [demo](https://takahad55.github.io/vammp/example/vammptest/vammptest.html)
 
+[jsfiddle](https://jsfiddle.net/1mpthLku/)
+
 ## Two formats
 
 It supports two formats: function format and array format. They can be mixed.
