@@ -7,16 +7,26 @@
 
 // module globals
 const glob = {
-  version: '0.0.1',
+  version: '0.0.2',
   createNode: createNodeStandard,
   extCreateElement: undefined,
   createElementHasVargChild: undefined,
+  createViewNeedsSingleNode: undefined,
 }
 
 // set external createElement (export)
 function setCreateElement(fn, param) {
   glob.extCreateElement = fn
-  glob.createElementHasVargChild = param ? param.hasVargChild : false
+  if (param) {
+    if (param.reactMode) {
+      glob.createElementHasVargChild = true
+      glob.createViewNeedsSingleNode = true
+    }
+    else {
+      glob.createElementHasVargChild = param.createElementHasVargChild
+      glob.createViewNeedsSingleNode = param.createViewNeedsSingleNode
+    }
+  }
   if (fn) {
     glob.createNode = createNodeExternal
   }
@@ -53,14 +63,20 @@ function createNodeExternal(tag, props, children) {
   if (children && children.length) {
     childList = []
     for (let child of children) {
-      const v = createView(child)
+      const v = innerCreateView(child)
       v.forEach(x => childList.push(x))
     }
   }
   excludeAliasProps(props) // exclude properties with initial capital letters
   if (glob.createElementHasVargChild) {
-    const node = glob.extCreateElement(tag, props, ...childList)
-    return node
+    if (childList) {
+      const node = glob.extCreateElement(tag, props, ...childList)
+      return node
+    }
+    else {
+      const node = glob.extCreateElement(tag, props, undefined)
+      return node
+    }
   }
   const n = glob.extCreateElement(tag, props, childList)
   return n
@@ -73,7 +89,7 @@ function mount(sel, view) {
     console.error('not found: ' + sel)
     return
   }
-  const nodes = createView(view)
+  const nodes = innerCreateView(view)
   root.append(...nodes)
 }
 
@@ -147,8 +163,17 @@ function createItem(item) {
   return glob.createNode(item.tag, props, children)
 }
 
-// create view
+// create view (export)
 function createView(view) {
+  const ary = innerCreateView(view)
+  if (glob.createViewNeedsSingleNode) {
+    return ary[0]
+  }
+  return ary
+}
+
+// create view
+function innerCreateView(view) {
   if (typeof view == 'string' || !Array.isArray(view)) {
     return [createItem(view)]
   }

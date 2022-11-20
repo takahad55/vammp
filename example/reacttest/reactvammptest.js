@@ -5,7 +5,7 @@ const {
   createView, element, collectArgs,
   button, div, input, label,
 } = vammp
-vammp.setCreateElement(createElement)
+vammp.setCreateElement(createElement, {reactMode: true})
 
 function TodoList(props) {
   const [newItem, setNewItem] = useState('')
@@ -34,7 +34,7 @@ function TodoList(props) {
       ref: newItemInput,
     }],
     [button, 'Add', {onClick: addItem}],
-    props.todoItems.map((item, index) => [div, { key: item.key },
+    ...props.todoItems.map((item, index) => [div, { key: item.key },
       [label,
         {style: {textDecoration: item.status ? 'line-through' : ''}},
         [checkBox, { checked: item.status, onChange: () =>
@@ -85,7 +85,7 @@ function App() {
     setTodoItems(items)
   }
   const TodoListTag = (...args) => element(TodoList, ...args)
-  return createView([
+  return createView([div,
     [div, [button, 'Change', { onClick: (e) => setPageSel(!pageSel) }]],
     pageSel ?
     [div,

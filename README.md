@@ -7,7 +7,7 @@ JavaScriptで定義したviewデータからDOMツリーを生成します。Vue
 ## Example
 
 ```js:vammpdemo.js
-import vammp from 'https://unpkg.com/vammp@0.0.1/src/vammp.js'
+import vammp from 'https://unpkg.com/vammp/src/vammp.js'
 const { div, button, mount,} = vammp
 
 function app() {
@@ -314,9 +314,9 @@ app.mount('#app')
 
 ## Use with React
 
-For React, set the render function React.createElement.
+For React, set the render function React.createElement. Pass the parameter {reactMode: true}.
 
-Reactの場合レンダー関数React.createElementをセットします。
+Reactの場合レンダー関数React.createElementをセットします。パラメータ{reactMode: true}を渡してください。
 
 [demo](https://takahad55.github.io/vammp/example/reacttest/reactvammptest.html)
 
@@ -329,7 +329,7 @@ const {
   button, div, input, label,
 } = vammp
 
-vammp.setCreateElement(createElement)
+vammp.setCreateElement(createElement, {reactMode: true})
 
 function TodoList(props) {
   const [newItem, setNewItem] = useState('')
@@ -358,7 +358,7 @@ function TodoList(props) {
       ref: newItemInput,
     }],
     [button, 'Add', {onClick: addItem}],
-    props.todoItems.map((item, index) => [div, { key: item.key },
+    ...props.todoItems.map((item, index) => [div, { key: item.key },
       [label,
         {style: {textDecoration: item.status ? 'line-through' : ''}},
         [checkBox, { checked: item.status, onChange: () =>
@@ -409,7 +409,7 @@ function App() {
     setTodoItems(items)
   }
   const TodoListTag = (...args) => element(TodoList, ...args)
-  return createView([
+  return createView([div,
     [div, [button, 'Change', { onClick: (e) => setPageSel(!pageSel) }]],
     pageSel ?
     [div,
