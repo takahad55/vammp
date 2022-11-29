@@ -1,6 +1,6 @@
 # vammp
 
-Build a DOM tree from view data defined in JavaScript. It can be used with Vue, React or Hyperapp.
+JavaScriptで定義したviewデータからDOMツリーを生成します。VueやReact、Hyperappで使うこともできます。
 
 ## Example
 
@@ -42,7 +42,7 @@ app()
 
 ## Two formats
 
-It supports two formats: function format and array format. They can be mixed.
+関数フォーマット、配列フォーマットの２つのフォーマットをサポートしています（混在可能）。
 
 ### Function format
 
@@ -50,8 +50,8 @@ It supports two formats: function format and array format. They can be mixed.
 tag([child?|props?, ...])
 ```
 
-There are functions corresponding to all tags, and in Array format function calls represent element generation.
-Properties are optional, can be multiple, and can be mixed with child elements.
+全タグに対応する関数があり、関数フォーマットでは関数呼び出しがelement生成を表します。
+プロパティは省略可能、複数可能で子要素と混在可能です。
 
 ```js
 const view = [
@@ -70,7 +70,7 @@ const view = [
 ```js
 [tag, [child?|props?, ...]]
 ```
-Array format puts the tag function and its arguments into an array instead of the function call.
+配列フォーマットでは関数呼び出しの代わりにtag関数とその引数を一つの配列に入れます。
 
 ```js
 const view = [
@@ -87,7 +87,7 @@ const view = [
 
 ## class and style (DOM only)
 
-Class and style can be specified in two forms: strings and objects. Mixing is not allowed in one element.
+classとstyleは文字列とオブジェクトの２つの形式で指定できます。一つのelement指定の中で混在はできません。
 
 class:
 ```js
@@ -103,7 +103,7 @@ style:
 
 ## alias
 
-An element with properties and child elements can be defined as an alias that can specify additional properties and child elements.
+プロパティや子要素を持つelementを、追加でプロパティや子要素指定可能なaliasとして定義できます。
 
 ```js
 const greyFont = {style: 'color: grey;'}
@@ -120,7 +120,7 @@ const view = [
 
 ## Ref (DOM only)
 
-It supports a way to get a DOM Element reference without using getElementById(). Specify an empty object for the Ref property and any name for the Name property. DOM Element is set to ref['name'] after mount().
+getElementById()を使用しなくてもDOM Elementの参照を取得する方法をサポートしています。Refプロパティに空のobjectを、Nameプロパティに任意の名前を指定してください。mount後にref['name']にDOM Elementがセットされます。
 
 ```js
 function app() {
@@ -193,9 +193,9 @@ app()
 
 ## Use with Vue
 
-You can switch the render function using setCreateElement(). For Vue, set the render function h.
-Use createView() to create view.
-Components should use element() to generate a tag function that can be used in vammp format.
+setCreateElement()を使うとレンダー関数を切り替えられます。Vueの場合レンダー関数hをセットします。
+viewの生成にはcreateView()を使用します。
+コンポーネントはelement()を使ってvammpフォーマットで使用できるtag関数を生成する必要があります。
 
 [Vue demo](https://takahad55.github.io/vammp/example/vuetest/vuevammptest.html)
 
@@ -295,7 +295,7 @@ app.mount('#app')
 
 ## Use with React
 
-For React, set the render function React.createElement with parameter {reactMode: true}.
+Reactの場合レンダー関数React.createElementをセットします。パラメータ{reactMode: true}を渡してください。
 
 [React demo](https://takahad55.github.io/vammp/example/reacttest/reactvammptest.html)
 
@@ -409,14 +409,15 @@ root.render(React.createElement(App, {}, null));
 
 ## Use with Hyperapp
 
-For hyperapp you need to replace text() for vammp.
-Do not use text() for simple strings in vammp. state requires text().
-Set the render function h with parameter {textWrapper: hyperapptext}.
+hyperappではtext()をvammp用に入れ替える必要があります。
+vammpでは単純な文字列にはtextを使用しないでください。stateにはtext()が必要です。
+レンダー関数hをパラメータ{textWrapper: hyperapptext}と共にセットしてください。
 
 [Hyperapp demo](https://takahad55.github.io/vammp/example/hyperapptest/index.html)
 
 ```js
 import { h, text as hyperapptext, app } from "https://unpkg.com/hyperapp"
+//import vammp from 'https://unpkg.com/vammp/src/vammp.js'
 import vammp from '../../src/vammp.js'
 
 const {
@@ -545,7 +546,8 @@ const {
 
 ### HTML to vammp format converter in Python
 
-Reads HTML from standard input and outputs vammp format to standard output. `pip3 install beautifulsoup4` command is required.
+標準入力からHTMLを読み込み標準出力へvammpフォーマットを出力します。
+`pip3 install beautifulsoup4`が必要です。
 
 ```Python
 import sys

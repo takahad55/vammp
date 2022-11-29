@@ -7,11 +7,20 @@
 
 // module globals
 const glob = {
-  version: '0.0.2',
+  version: '0.0.3',
   createNode: createNodeStandard,
   extCreateElement: undefined,
   createElementHasVargChild: undefined,
   createViewNeedsSingleNode: undefined,
+  passUppercaseProp: undefined,
+  textWrapper: undefined,
+}
+
+const KeyRawNode = Symbol('rawNode')
+
+function rawNode(node) {
+  node[KeyRawNode] = true
+  return node
 }
 
 // set external createElement (export)
@@ -22,9 +31,15 @@ function setCreateElement(fn, param) {
       glob.createElementHasVargChild = true
       glob.createViewNeedsSingleNode = true
     }
+    else if (param.textWrapper) {
+      // hyperapp
+      glob.createViewNeedsSingleNode = true
+      glob.textWrapper = param.textWrapper
+    }
     else {
       glob.createElementHasVargChild = param.createElementHasVargChild
       glob.createViewNeedsSingleNode = param.createViewNeedsSingleNode
+      glob.passUppercaseProp = param.passUppercaseProp
     }
   }
   if (fn) {
@@ -63,11 +78,25 @@ function createNodeExternal(tag, props, children) {
   if (children && children.length) {
     childList = []
     for (let child of children) {
-      const v = innerCreateView(child)
-      v.forEach(x => childList.push(x))
+      if (typeof child == 'string' && glob.textWrapper) {
+        // hyperapp.text()
+        childList.push(glob.textWrapper(child))
+      }
+      else if (child[KeyRawNode]) {
+        childList.push(child)
+      }
+      else {
+        const v = innerCreateView(child)
+        v.forEach(x => childList.push(x))
+      }
     }
   }
-  excludeAliasProps(props) // exclude properties with initial capital letters
+  if (!props) {
+    props = {}
+  }
+  else if (!glob.passUppercaseProp) {
+    excludeAliasProps(props) // exclude properties with initial capital letters
+  }
   if (glob.createElementHasVargChild) {
     if (childList) {
       const node = glob.extCreateElement(tag, props, ...childList)
@@ -103,7 +132,9 @@ function mergeProp(a, b) {
   }
   if ((typeof a == 'string')&&(typeof b == 'string')) {
     const sep = a.length ? ' ' : ''
-    return a + sep + b
+    const s = a + sep + b
+    const t = new Set(s.split(' ').filter(x => x.length > 0))
+    return [...t.keys()].join(' ')
   }
   else if (typeof a == 'object' && typeof b == 'object') {
     return {...a, ...b}
@@ -119,16 +150,21 @@ function collectArgs(args) {
   }
   const props = {}
   let children
-  for (const arg of args) {
+  for (let arg of args) {
     if (!arg) {
       continue
     }
     if ((!Array.isArray(arg)) && (typeof arg == 'object') && !arg.tag) {
-      const newClass = mergeProp(props.class, arg.class)
+      let newClass = mergeProp(props.className, arg.className)
+      newClass = mergeProp(newClass, arg.class)
+      if (arg.class) {
+        arg = {...arg}
+        delete arg.class
+      }
       const newStyle = mergeProp(props.style, arg.style)
       Object.assign(props, arg)
       if (newClass) {
-        props.class = newClass
+        props.className = newClass
       }
       if (newStyle) {
         props.style = newStyle
@@ -248,7 +284,7 @@ function setProps(node, props) {
     else if ('style' == key) {
       setStyle(node, value)
     }
-    else if ('class' == key) {
+    else if (('class' == key)||('className' == key)) {
       setClass(node, value)
     }
     else if (key[0].toUpperCase() == key[0]) {
@@ -330,7 +366,7 @@ const tagNames = [
 // exports
 const vammp = {
   mount, createView, element, setCreateElement, collectArgs, 
-  setStyle, setClass, getStyleObj, getClassObj,
+  setStyle, setClass, getStyleObj, getClassObj, rawNode,
 }
 
 // create and add tag functions to exports
