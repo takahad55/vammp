@@ -450,12 +450,17 @@ const statusChange = (state, key) => {
   return {...state}
 }
 
-const addItem = (state) => ({
-  ...state, newTodo: '',
-  todoItems: state.todoItems.concat(
-    {status: false, text: state.newTodo, key: ++keygen}
-  ),
-})
+const addItem = (state) => {
+  if ((!state.newTodo)||(0 == state.newTodo.length)) {
+    return state
+  }
+  return {
+    ...state, newTodo: '',
+    todoItems: state.todoItems.concat(
+      {status: false, text: state.newTodo, key: ++keygen}
+    ),
+  }
+}
 
 const removeItem = (state, key) => {
   const idx = state.todoItems.findIndex(x => x.key == key)
