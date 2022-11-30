@@ -1,8 +1,8 @@
 import test from 'node:test'
 import assert from 'node:assert'
 
-import vammp from '../src/vammp.js'
-const {
+import {
+  setCreateElement,
   createView, mount, element, collectArgs, getStyleObj, getClassObj,
   html, base, head, link, meta, style, title, body,
   address, article, aside, footer, header,
@@ -20,8 +20,8 @@ const {
   button, datalist, fieldset, form, input, label, legend,
   meter, optgroup, option, output, progress, select, textarea,
   details, dialog, summary,
-  slot, template,
-} = vammp
+  slot, template, vammp,
+} from '../src/vammp.js'
 
 const stubQuerySelectorNode = {
   sel: undefined,
@@ -331,12 +331,12 @@ for (const j of [0, 1]) {
   })  
 
   // change to extCreateElement test
-  vammp.setCreateElement(extCreateElement)
+  setCreateElement(extCreateElement)
   preTag = 'EXT'
 }
 
 // change to standardCreateElement test
-vammp.setCreateElement()
+setCreateElement()
 preTag = 'STUB'
 
 test('mount', (t) => {

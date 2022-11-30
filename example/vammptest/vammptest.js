@@ -1,7 +1,8 @@
-import vammp from '../../src/vammp.js'
-const { div, button, mount, br, select, option, collectArgs,
-  setStyle, setClass, getStyleObj, getClassObj,
-} = vammp
+import {
+  collectArgs, setStyle, setClass, getStyleObj, getClassObj,
+  div, button, mount, br, select, option, 
+} from '../../src/vammp.js'
+//} from 'https://unpkg.com/vammp'
 
 /*
 <div>

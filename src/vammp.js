@@ -7,7 +7,7 @@
 
 // module globals
 const glob = {
-  version: '0.0.3',
+  version: '0.2.0',
   createNode: createNodeStandard,
   extCreateElement: undefined,
   createElementHasVargChild: undefined,
@@ -16,11 +16,30 @@ const glob = {
   textWrapper: undefined,
 }
 
+function toCamel(s) {
+  const r = s.split('-').map((x, idx) => {
+    if (0 == idx) {
+      return x
+    }
+    return x.charAt(0).toUpperCase() + x.slice(1)
+  }).join('')
+  return r
+}
+
 const KeyRawNode = Symbol('rawNode')
+const KeyInfo = Symbol('info')
 
 function rawNode(node) {
   node[KeyRawNode] = true
   return node
+}
+
+function getTagInfo(obj) {
+  return obj[KeyInfo]
+}
+
+function setTagInfo(obj, value) {
+  obj[KeyInfo] = value
 }
 
 // set external createElement (export)
@@ -144,9 +163,12 @@ function mergeProp(a, b) {
 }
 
 // collect args to props and children (export)
-function collectArgs(args) {
+function collectArgs(args, classKey) {
   if (!args) {
     return {props: {}, children: undefined}
+  }
+  if (!classKey) {
+    classKey = 'className'
   }
   const props = {}
   let children
@@ -155,16 +177,17 @@ function collectArgs(args) {
       continue
     }
     if ((!Array.isArray(arg)) && (typeof arg == 'object') && !arg.tag) {
-      let newClass = mergeProp(props.className, arg.className)
+      let newClass = mergeProp(props[classKey], arg.className)
       newClass = mergeProp(newClass, arg.class)
-      if (arg.class) {
+      if (newClass) {
         arg = {...arg}
         delete arg.class
+        delete arg.className
       }
       const newStyle = mergeProp(props.style, arg.style)
       Object.assign(props, arg)
       if (newClass) {
-        props.className = newClass
+        props[classKey] = newClass
       }
       if (newStyle) {
         props.style = newStyle
@@ -363,20 +386,80 @@ const tagNames = [
   'slot', 'template',
 ]
 
+const typeNames = [
+  'button', 'checkbox', 'color', 'date', 'datetime-local',
+  'email', 'file', 'hidden', 'image', 'month', 'number',
+  'password', 'radio',  'range', 'reset', 'search',
+  'submit', 'tel', 'text', 'time', 'url', 'week',
+]
+
 // exports
 const vammp = {
   mount, createView, element, setCreateElement, collectArgs, 
   setStyle, setClass, getStyleObj, getClassObj, rawNode,
+  getTagInfo, setTagInfo,
 }
 
 // create and add tag functions to exports
-tagNames.forEach(name =>
+tagNames.forEach(name => {
   vammp[name] = (...args) => element(name, ...args)
-)
+  vammp[name][KeyInfo] = {name}
+})
+
+vammp.typ = {}
+typeNames.forEach(name => {
+  vammp.typ[toCamel(name)] = {type: name}
+})
 
 vammp.version = glob.version
 
-export default vammp
+// expand all
+const {
+  html, base, head, link, meta, style, title, body,
+  address, article, aside, footer, header,
+  h1, h2, h3, h4, h5, h6, main, nav, section,
+  blockquote, dd, div, dl, dt, figcaption, figure, hr, li,
+  menu, ol, p, pre, ul,
+  a, abbr, b, bdi, bdo, br,
+  cite, code, data, dfn, em, i, kbd, mark, q, rp, rt,
+  ruby, s, samp, small, span, strong, sub, sup, time, u,
+  /*var,*/ wbr, area, audio, img, map, track, video,
+  embed, iframe, object, picture, portal, source,
+  svg, math, canvas, noscript, script, del, ins,
+  caption, col, colgroup, table, tbody, td, tfoot, th,
+  thead, tr,
+  button, datalist, fieldset, form, input, label, legend,
+  meter, optgroup, option, output, progress, select, textarea,
+  details, dialog, summary,
+  slot, template,
+  typ, version,
+} = vammp
+
+//export default vammp
+
+export {
+  html, base, head, link, meta, style, title, body,
+  address, article, aside, footer, header,
+  h1, h2, h3, h4, h5, h6, main, nav, section,
+  blockquote, dd, div, dl, dt, figcaption, figure, hr, li,
+  menu, ol, p, pre, ul,
+  a, abbr, b, bdi, bdo, br,
+  cite, code, data, dfn, em, i, kbd, mark, q, rp, rt,
+  ruby, s, samp, small, span, strong, sub, sup, time, u,
+  /*var,*/ wbr, area, audio, img, map, track, video,
+  embed, iframe, object, picture, portal, source,
+  svg, math, canvas, noscript, script, del, ins,
+  caption, col, colgroup, table, tbody, td, tfoot, th,
+  thead, tr,
+  button, datalist, fieldset, form, input, label, legend,
+  meter, optgroup, option, output, progress, select, textarea,
+  details, dialog, summary,
+  slot, template,
+  mount, createView, element, setCreateElement, collectArgs, 
+  setStyle, setClass, getStyleObj, getClassObj, rawNode,
+  getTagInfo, setTagInfo,
+  typ, version, vammp,
+}
 
 /*
 // one file test -------------------------------

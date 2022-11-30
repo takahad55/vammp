@@ -1,13 +1,13 @@
 import {
   createApp, ref, reactive, h, resolveComponent,
 } from 'https://unpkg.com/vue@next/dist/vue.esm-browser.prod.js'
-
-import vammp from '../../src/vammp.js'
-const {
-  createView, element, collectArgs,
+import {
+  setCreateElement, createView, element, collectArgs,
   button, div, input, label,
-} = vammp
-vammp.setCreateElement(h)
+} from '../../src/vammp.js'
+//} from 'https://unpkg.com/vammp'
+
+setCreateElement(h)
 
 const TodoList = {
   props: { todoItems: Object, },

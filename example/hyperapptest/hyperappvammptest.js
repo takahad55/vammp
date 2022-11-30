@@ -1,13 +1,11 @@
 import { h, text as hyperapptext, app } from "https://unpkg.com/hyperapp"
-//import vammp from 'https://unpkg.com/vammp/src/vammp.js'
-import vammp from '../../src/vammp.js'
-
-const {
-  createView, rawNode,
+import {
+  setCreateElement, createView, rawNode,
   div, input, button, label,
-} = vammp
+} from '../../src/vammp.js'
+//} from 'https://unpkg.com/vammp'
 
-vammp.setCreateElement(h, {textWrapper: hyperapptext})
+setCreateElement(h, {textWrapper: hyperapptext})
 const text = (txt) => rawNode(hyperapptext(txt))
 
 let keygen = 0

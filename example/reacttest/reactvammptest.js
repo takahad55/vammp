@@ -1,11 +1,11 @@
 const { useState, useEffect, useRef, createElement } = React
-
-import vammp from '../../src/vammp.js'
-const {
-  createView, element, collectArgs,
+import {
+  setCreateElement, createView, element, collectArgs,
   button, div, input, label,
-} = vammp
-vammp.setCreateElement(createElement, {reactMode: true})
+} from '../../src/vammp.js'
+//} from 'https://unpkg.com/vammp'
+
+setCreateElement(createElement, {reactMode: true})
 
 function TodoList(props) {
   const [newItem, setNewItem] = useState('')

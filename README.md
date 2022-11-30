@@ -1,12 +1,11 @@
-# vammp
+# Vammp
 
 Build a DOM tree from view data defined in JavaScript. It can be used with Vue, React or Hyperapp.
 
 ## Example
 
 ```js:vammpdemo.js
-import vammp from 'https://unpkg.com/vammp/src/vammp.js'
-const { div, button, mount,} = vammp
+import { div, button, mount, } from 'https://unpkg.com/vammp'
 
 function app() {
   const view = [
@@ -37,8 +36,6 @@ app()
 ```
 
 [demo](https://takahad55.github.io/vammp/example/vammptest/vammptest.html)
-
-[jsfiddle](https://jsfiddle.net/1mpthLku/)
 
 ## Two formats
 
@@ -201,11 +198,12 @@ Components should use element() to generate a tag function that can be used in v
 
 ```js
 import { createApp, ref, reactive, h, resolveComponent } from 'vue'
+import {
+  setCreateElement, createView, element, collectArgs,
+  button, div, input, label 
+} from 'vammp'
 
-import vammp from 'vammp'
-const { createView, element, collectArgs, button, div, input, label } = vammp
-
-vammp.setCreateElement(h)
+setCreateElement(h)
 
 const TodoList = {
   props: { todoItems: Object, },
@@ -301,12 +299,10 @@ For React, set the render function React.createElement with parameter {reactMode
 
 ```js
 const { useState, useEffect, useRef, createElement } = React
-
-import vammp from 'vammp'
-const {
+import {
   createView, element, collectArgs,
   button, div, input, label,
-} = vammp
+} from 'vammp'
 
 vammp.setCreateElement(createElement, {reactMode: true})
 
@@ -417,14 +413,12 @@ Set the render function h with parameter {textWrapper: hyperapptext}.
 
 ```js
 import { h, text as hyperapptext, app } from "https://unpkg.com/hyperapp"
-import vammp from '../../src/vammp.js'
-
-const {
-  createView, rawNode,
+import {
+  setCreateElement, createView, rawNode,
   div, input, button, label,
-} = vammp
+} from 'vammp'
 
-vammp.setCreateElement(h, {textWrapper: hyperapptext})
+setCreateElement(h, {textWrapper: hyperapptext})
 const text = (txt) => rawNode(hyperapptext(txt))
 
 let keygen = 0
@@ -518,29 +512,30 @@ app({
 ## All exports
 
 ```js
-const {
-    // tags
-    html, base, head, link, meta, style, title, body,
-    address, article, aside, footer, header,
-    h1, h2, h3, h4, h5, h6, main, nav, section,
-    blockquote, dd, div, dl, dt, figcaption, figure, hr, li,
-    menu, ol, p, pre, ul, a, abbr, b, bdi, bdo, br,
-    cite, code, data, dfn, em, i, kbd, mark, q, rp, rt,
-    ruby, s, samp, small, span, strong, sub, sup, time, u,
-    //var, // var is in conflict with js. use vammp.var.
-    wbr, area, audio, img, map, track, video,
-    embed, iframe, object, picture, portal, source,
-    svg, math, canvas, noscript, script, del, ins,
-    caption, col, colgroup, table, tbody, td, tfoot, th,
-    thead, tr,
-    button, datalist, fieldset, form, input, label, legend,
-    meter, optgroup, option, output, progress, select, textarea,
-    details, dialog, summary,
-    slot, template,
-    // API
-    mount, createView, element, setCreateElement, collectArgs,
-    setStyle, setClass, getStyleObj, getClassObj, rawNode,
-} = vammp
+{
+  // tags
+  html, base, head, link, meta, style, title, body,
+  address, article, aside, footer, header,
+  h1, h2, h3, h4, h5, h6, main, nav, section,
+  blockquote, dd, div, dl, dt, figcaption, figure, hr, li,
+  menu, ol, p, pre, ul, a, abbr, b, bdi, bdo, br,
+  cite, code, data, dfn, em, i, kbd, mark, q, rp, rt,
+  ruby, s, samp, small, span, strong, sub, sup, time, u,
+  //var, // var is in conflict with js. use vammp.var.
+  wbr, area, audio, img, map, track, video,
+  embed, iframe, object, picture, portal, source,
+  svg, math, canvas, noscript, script, del, ins,
+  caption, col, colgroup, table, tbody, td, tfoot, th,
+  thead, tr,
+  button, datalist, fieldset, form, input, label, legend,
+  meter, optgroup, option, output, progress, select, textarea,
+  details, dialog, summary,
+  slot, template,
+  // API
+  mount, createView, element, setCreateElement, collectArgs,
+  setStyle, setClass, getStyleObj, getClassObj, rawNode,
+  version, vammp,
+} 
 ```
 
 ### HTML to vammp format converter in Python
